@@ -6,5 +6,10 @@ TensorFlowjs object detection app with react native
 
 To run the project, clone and from the root, run the commands:
 
-1. npm install
-2. npm start
+1. yarn install
+2. yarn start
+
+### Todo
+
+- seperate into camera and image picker
+- style
