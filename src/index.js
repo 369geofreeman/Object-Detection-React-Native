@@ -18,7 +18,7 @@ import * as jpeg from "jpeg-js";
 // Components
 import Header from "./header/Header";
 import PickImage from "./pickImage/PickImage";
-import Camera from "./camera/Camera";
+import CameraView from "./camera/CameraView";
 import Results from "./results/Results";
 import Footer from "./footer/Footer";
 
@@ -130,7 +130,10 @@ const AppMain = () => {
       <View style={styles.formContainer}>
         {cameraOpen && (
           <View style={styles.screenSwipe}>
-            <Camera />
+            <CameraView
+              // getImage={}
+              setCameraOpen={() => setCameraOpen(!cameraOpen)}
+            />
           </View>
         )}
         <View style={styles.screenSwipe}>
@@ -143,7 +146,10 @@ const AppMain = () => {
         </View>
       </View>
 
-      <Footer toggleCamera={() => setCameraOpen(!cameraOpen)} />
+      <Footer
+        toggleCamera={() => setCameraOpen(!cameraOpen)}
+        showBtn={cameraOpen}
+      />
     </View>
   );
 };

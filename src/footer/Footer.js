@@ -1,23 +1,17 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View, Animated, Easing } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import {
-  blue,
-  windowWidth,
-  windowHeight,
-  red,
-  yellow,
-  darkBlue,
-  green,
-} from "../constants";
+import { windowWidth, windowHeight, red, green } from "../constants";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default function Footer({ toggleCamera }) {
+export default function Footer({ toggleCamera, showBtn }) {
   const buttonAnimation = new Animated.Value(0);
+  const cardShrink = new Animated.Value(0);
 
   useEffect(() => {
     animation();
-  }, []);
+    if (showBtn) cardAnimation();
+  }, [showBtn]);
 
   const animation = () => {
     Animated.loop(
@@ -30,31 +24,44 @@ export default function Footer({ toggleCamera }) {
     ).start();
   };
 
+  const cardAnimation = () => {
+    Animated.timing(cardShrink, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  };
+
   const btnScale = buttonAnimation.interpolate({
     inputRange: [0, 0.5, 1],
     outputRange: [1, 1.13, 1],
   });
+  const cardTop = cardShrink.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, -windowHeight * 0.3],
+  });
 
   return (
-    <View style={styles.footer}>
-      <TouchableOpacity onPress={toggleCamera}>
-        <Animated.View style={{ transform: [{ scale: btnScale }] }}>
-          <MaterialCommunityIcons
-            name="circle-slice-8"
-            size={windowWidth * 0.28}
-            color={green}
-            style={styles.icon}
-          />
-        </Animated.View>
-      </TouchableOpacity>
-    </View>
+    <Animated.View style={[styles.footer, { bottom: cardTop }]}>
+      {!showBtn && (
+        <TouchableOpacity onPress={toggleCamera}>
+          <Animated.View style={{ transform: [{ scale: btnScale }] }}>
+            <MaterialCommunityIcons
+              name="circle-slice-8"
+              size={windowWidth * 0.28}
+              color={green}
+              style={styles.icon}
+            />
+          </Animated.View>
+        </TouchableOpacity>
+      )}
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   footer: {
     position: "absolute",
-    bottom: 0,
     left: 0,
     right: 0,
     height: windowHeight * 0.2,
@@ -63,9 +70,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderTopRightRadius: windowWidth * 0.1,
     borderTopLeftRadius: windowWidth * 0.1,
+    borderWidth: 4,
+    borderTopColor: green,
+    borderLeftColor: green,
+    borderRightColor: green,
   },
   icon: {
     marginTop: windowHeight * 0.025,
-    zIndex: 1,
+    opacity: 0.8,
   },
 });

@@ -19,7 +19,7 @@ export default function PickImage({ isModelReady, selectImage, image }) {
         {image && <Image source={image} style={styles.imageContainer} />}
         {isModelReady ? (
           <View style={styles.textContainer}>
-            <Text style={styles.transparentText}>Tap to choose image</Text>
+            <Text style={styles.transparentText}>Tap to choose an image</Text>
             <Text style={styles.transparentText}>- OR -</Text>
             <Text style={styles.transparentText}>Open camera below</Text>
           </View>
