@@ -1,20 +1,15 @@
 import React from "react";
-import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import { StyleSheet, Text, View, ActivityIndicator, Image } from "react-native";
+import { windowWidth, windowHeight } from "../constants";
 
 export default function Header({ isTfReady, isModelReady }) {
   return (
     <View style={styles.loadingContainer}>
-      <Text style={styles.text}>
-        TFJS ready? {isTfReady ? <Text>✅</Text> : ""}
-      </Text>
-      <View style={styles.loadingModelContainer}>
-        <Text style={styles.text}>Model ready? </Text>
-        {isModelReady ? (
-          <Text style={styles.text}>✅</Text>
-        ) : (
-          <ActivityIndicator size="small" />
-        )}
-      </View>
+      <Image
+        source={require("../../assets/logo.png")}
+        style={styles.logo}
+        ImageResizeMode="cover"
+      />
     </View>
   );
 }
@@ -22,14 +17,10 @@ export default function Header({ isTfReady, isModelReady }) {
 const styles = StyleSheet.create({
   loadingContainer: {
     marginTop: 80,
-    justifyContent: "center",
+    marginBottom: windowHeight * 0.06,
   },
-  text: {
-    color: "#ffffff",
-    fontSize: 16,
-  },
-  loadingModelContainer: {
-    flexDirection: "row",
-    marginTop: 10,
+  logo: {
+    width: windowWidth,
+    height: windowHeight * 0.1,
   },
 });

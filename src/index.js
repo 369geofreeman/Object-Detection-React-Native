@@ -129,8 +129,7 @@ const AppMain = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#171f24",
-    alignItems: "center",
+    backgroundColor: "#111",
   },
 });
 
