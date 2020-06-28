@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, StatusBar, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  Image,
+  LayoutAnimation,
+} from "react-native";
+import { customLayoutAnimation, windowWidth } from "./constants";
 import * as ImagePicker from "expo-image-picker";
 import * as tf from "@tensorflow/tfjs";
 import { fetch } from "@tensorflow/tfjs-react-native";
@@ -7,9 +15,10 @@ import * as mobilenet from "@tensorflow-models/mobilenet";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import * as jpeg from "jpeg-js";
-
+// Components
 import Header from "./header/Header";
 import PickImage from "./pickImage/PickImage";
+import Camera from "./camera/Camera";
 import Results from "./results/Results";
 import Footer from "./footer/Footer";
 
@@ -19,6 +28,15 @@ const AppMain = () => {
   const [predictions, setPredictions] = useState(null);
   const [mobileModel, setMobileModel] = useState(null);
   const [image, setImage] = useState(null);
+  const [cameraOpen, setCameraOpen] = useState(false);
+
+  if (
+    Platform.OS === "android" &&
+    UIManager.setLayoutAnimationEnabledExperimental
+  ) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+  LayoutAnimation.configureNext(customLayoutAnimation);
 
   useEffect(() => {
     (async () => {
@@ -109,27 +127,48 @@ const AppMain = () => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
-      <Header isTfReady={isTfReady} isModelReady={isModelReady} />
-      <PickImage
-        isModelReady={isModelReady}
-        selectImage={selectImage}
-        image={image}
-      />
+      <View style={styles.formContainer}>
+        {cameraOpen && (
+          <View style={styles.screenSwipe}>
+            <Camera />
+          </View>
+        )}
+        <View style={styles.screenSwipe}>
+          <Header isTfReady={isTfReady} isModelReady={isModelReady} />
+          <PickImage
+            isModelReady={isModelReady}
+            selectImage={selectImage}
+            image={image}
+          />
+        </View>
+      </View>
+
+      <Footer toggleCamera={() => setCameraOpen(!cameraOpen)} />
+    </View>
+  );
+};
+
+{
+  /* TO GO INSIDE A SICK MODAL
       <Results
         isModelReady={isModelReady}
         image={image}
         predictions={predictions}
         renderPrediction={renderPrediction}
-      />
-      <Footer />
-    </View>
-  );
-};
+      /> */
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#111",
+  },
+  formContainer: {
+    flexDirection: "row",
+    width: windowWidth,
+  },
+  screenSwipe: {
+    width: windowWidth,
   },
 });
 

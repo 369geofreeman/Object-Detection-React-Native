@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
   },
   transparentText: {
     color: yellow,
+    fontFamily: "Copperplate",
     textAlign: "center",
     marginTop: windowHeight * 0.01,
     fontWeight: "800",

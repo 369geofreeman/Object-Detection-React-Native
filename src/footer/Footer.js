@@ -10,8 +10,9 @@ import {
   darkBlue,
   green,
 } from "../constants";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default function Footer() {
+export default function Footer({ toggleCamera }) {
   const buttonAnimation = new Animated.Value(0);
 
   useEffect(() => {
@@ -36,14 +37,16 @@ export default function Footer() {
 
   return (
     <View style={styles.footer}>
-      <Animated.View style={{ transform: [{ scale: btnScale }] }}>
-        <MaterialCommunityIcons
-          name="circle-slice-8"
-          size={windowWidth * 0.28}
-          color={green}
-          style={styles.icon}
-        />
-      </Animated.View>
+      <TouchableOpacity onPress={toggleCamera}>
+        <Animated.View style={{ transform: [{ scale: btnScale }] }}>
+          <MaterialCommunityIcons
+            name="circle-slice-8"
+            size={windowWidth * 0.28}
+            color={green}
+            style={styles.icon}
+          />
+        </Animated.View>
+      </TouchableOpacity>
     </View>
   );
 }
