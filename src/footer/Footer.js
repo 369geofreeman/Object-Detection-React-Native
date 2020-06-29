@@ -4,14 +4,15 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { windowWidth, windowHeight, red, green } from "../constants";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default function Footer({ toggleCamera, showBtn }) {
+export default function Footer({ toggleCamera, showBtn, isModelReady }) {
   const buttonAnimation = new Animated.Value(0);
-  const cardShrink = new Animated.Value(0);
+  const cardShrink = new Animated.Value(1);
 
   useEffect(() => {
     animation();
+
     if (showBtn) cardAnimation();
-    if (!showBtn) cardAnimateBack();
+    cardAnimateBack();
   }, [showBtn]);
 
   const animation = () => {
@@ -58,7 +59,7 @@ export default function Footer({ toggleCamera, showBtn }) {
       style={[styles.footer, { bottom: showBtn ? cardTop : cardBack }]}
     >
       {!showBtn && (
-        <TouchableOpacity onPress={toggleCamera}>
+        <TouchableOpacity onPress={isModelReady ? toggleCamera : null}>
           <Animated.View style={{ transform: [{ scale: btnScale }] }}>
             <MaterialCommunityIcons
               name="circle-slice-8"

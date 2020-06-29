@@ -4,7 +4,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Image,
   ActivityIndicator,
 } from "react-native";
 import { windowWidth, windowHeight, yellow, green } from "../constants";
@@ -29,6 +28,8 @@ export default function PickImage({ isModelReady, selectImage, image }) {
             <Text style={styles.transparentText}>
               Please allow a few seconds
             </Text>
+            <View style={{ height: 15 }} />
+            <ActivityIndicator color={green} size="large" />
           </View>
         ) : (
           <View>

@@ -120,6 +120,7 @@ const AppMain = () => {
 
   const photoPrediction = async (source) => {
     await setImage(source);
+    await setCameraOpen(true);
     setCameraOpen(false);
     classifyImage(source);
   };
@@ -151,7 +152,7 @@ const AppMain = () => {
           </View>
         )}
         <View style={styles.screenSwipe}>
-          <Header isTfReady={isTfReady} isModelReady={isModelReady} />
+          <Header />
           <PickImage
             isModelReady={isModelReady}
             selectImage={selectImage}
@@ -163,6 +164,7 @@ const AppMain = () => {
       <Footer
         toggleCamera={() => setCameraOpen(!cameraOpen)}
         showBtn={cameraOpen}
+        isModelReady={isModelReady}
       />
       <Modal
         animationType="slide"

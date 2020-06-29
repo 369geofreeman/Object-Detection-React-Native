@@ -1,14 +1,14 @@
 {
   "expo": {
     "name": "objectDetection",
-    "slug": "objectDetection",
+    "slug": "object-detection-with-tensorflow",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -21,6 +21,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "TensorFlowjs object detection example app made with react native",
+    "githubUrl": "https://github.com/369geofreeman/Object-Detection-React-Native"
   }
 }

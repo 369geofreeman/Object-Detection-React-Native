@@ -1,8 +1,8 @@
 import React from "react";
-import { StyleSheet, Text, View, ActivityIndicator, Image } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 import { windowWidth, windowHeight } from "../constants";
 
-export default function Header({ isTfReady, isModelReady }) {
+export default function Header() {
   return (
     <View style={styles.loadingContainer}>
       <Image
