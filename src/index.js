@@ -6,6 +6,7 @@ import {
   StatusBar,
   Image,
   LayoutAnimation,
+  Modal,
 } from "react-native";
 import { customLayoutAnimation, windowWidth } from "./constants";
 import * as ImagePicker from "expo-image-picker";
@@ -29,6 +30,7 @@ const AppMain = () => {
   const [mobileModel, setMobileModel] = useState(null);
   const [image, setImage] = useState(null);
   const [cameraOpen, setCameraOpen] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   if (
     Platform.OS === "android" &&
@@ -47,6 +49,7 @@ const AppMain = () => {
       setIsModelReady(true);
     })();
     getPermissionAsync();
+    if (image) setModalVisible(true);
   }, [
     tf,
     mobilenet,
@@ -54,6 +57,8 @@ const AppMain = () => {
     setMobileModel,
     setIsModelReady,
     getPermissionAsync,
+    setModalVisible,
+    predictions,
   ]);
 
   const getPermissionAsync = async () => {
@@ -90,7 +95,6 @@ const AppMain = () => {
       const imageTensor = await imageToTensor(rawImageData);
       const predictions = await mobileModel.classify(imageTensor);
       setPredictions(predictions);
-      console.log(predictions);
     } catch (error) {
       console.log(error);
     }
@@ -107,13 +111,17 @@ const AppMain = () => {
       if (!response.cancelled) {
         const source = { uri: response.uri };
         await setImage(source);
-        console.log("Inside select Image. IMAGE: ", image);
-        console.log("Inside select Image. SOURCE: ", source);
         classifyImage(source);
       }
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const photoPrediction = async (source) => {
+    await setImage(source);
+    setCameraOpen(false);
+    classifyImage(source);
   };
 
   const renderPrediction = (prediction) => {
@@ -124,6 +132,12 @@ const AppMain = () => {
     );
   };
 
+  const closeModal = async () => {
+    await setPredictions(null);
+    await setImage(null);
+    setModalVisible(!modalVisible);
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -131,7 +145,7 @@ const AppMain = () => {
         {cameraOpen && (
           <View style={styles.screenSwipe}>
             <CameraView
-              // getImage={}
+              setImage={(source) => photoPrediction(source)}
               setCameraOpen={() => setCameraOpen(!cameraOpen)}
             />
           </View>
@@ -150,19 +164,23 @@ const AppMain = () => {
         toggleCamera={() => setCameraOpen(!cameraOpen)}
         showBtn={cameraOpen}
       />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={closeModal}
+      >
+        <Results
+          isModelReady={isModelReady}
+          image={image}
+          predictions={predictions}
+          renderPrediction={renderPrediction}
+          closeModal={closeModal}
+        />
+      </Modal>
     </View>
   );
 };
-
-{
-  /* TO GO INSIDE A SICK MODAL
-      <Results
-        isModelReady={isModelReady}
-        image={image}
-        predictions={predictions}
-        renderPrediction={renderPrediction}
-      /> */
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -175,6 +193,10 @@ const styles = StyleSheet.create({
   },
   screenSwipe: {
     width: windowWidth,
+  },
+  text: {
+    fontFamily: "Copperplate",
+    fontSize: 20,
   },
 });
 

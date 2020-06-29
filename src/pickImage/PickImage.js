@@ -1,6 +1,13 @@
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import { windowWidth, red, windowHeight, yellow } from "../constants";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from "react-native";
+import { windowWidth, windowHeight, yellow, green } from "../constants";
 import LottieView from "lottie-react-native";
 
 export default function PickImage({ isModelReady, selectImage, image }) {
@@ -16,15 +23,34 @@ export default function PickImage({ isModelReady, selectImage, image }) {
         style={styles.imageWrapper}
         onPress={isModelReady ? selectImage : undefined}
       >
-        {image && <Image source={image} style={styles.imageContainer} />}
-        {isModelReady ? (
-          <View style={styles.textContainer}>
-            <Text style={styles.transparentText}>Tap to choose an image</Text>
-            <Text style={styles.transparentText}>- OR -</Text>
-            <Text style={styles.transparentText}>Open camera below</Text>
+        {isModelReady && image ? (
+          <View>
+            <Text style={styles.transparentText}>Predicting...</Text>
+            <Text style={styles.transparentText}>
+              Please allow a few seconds
+            </Text>
           </View>
         ) : (
-          <Text style={styles.transparentText}>"Model Loading..."</Text>
+          <View>
+            {isModelReady ? (
+              <View style={styles.textContainer}>
+                <Text style={styles.transparentText}>
+                  Tap to choose an image
+                </Text>
+                <Text style={styles.transparentText}>- OR -</Text>
+                <Text style={styles.transparentText}>Open camera below</Text>
+              </View>
+            ) : (
+              <View style={styles.textContainer}>
+                <Text style={styles.transparentText}>Model Loading...</Text>
+                <ActivityIndicator
+                  size="large"
+                  color={green}
+                  style={{ marginTop: windowHeight * 0.03 }}
+                />
+              </View>
+            )}
+          </View>
         )}
       </TouchableOpacity>
     </View>
@@ -45,15 +71,6 @@ const styles = StyleSheet.create({
     position: "relative",
     justifyContent: "center",
     alignItems: "center",
-  },
-  imageContainer: {
-    width: 250,
-    height: 250,
-    position: "absolute",
-    top: 10,
-    left: 10,
-    bottom: 10,
-    right: 10,
   },
   textContainer: {
     marginTop: windowHeight * 0.05,

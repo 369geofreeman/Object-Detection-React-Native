@@ -11,6 +11,7 @@ export default function Footer({ toggleCamera, showBtn }) {
   useEffect(() => {
     animation();
     if (showBtn) cardAnimation();
+    if (!showBtn) cardAnimateBack();
   }, [showBtn]);
 
   const animation = () => {
@@ -31,6 +32,13 @@ export default function Footer({ toggleCamera, showBtn }) {
       useNativeDriver: false,
     }).start();
   };
+  const cardAnimateBack = () => {
+    Animated.timing(cardShrink, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  };
 
   const btnScale = buttonAnimation.interpolate({
     inputRange: [0, 0.5, 1],
@@ -40,9 +48,15 @@ export default function Footer({ toggleCamera, showBtn }) {
     inputRange: [0, 1],
     outputRange: [0, -windowHeight * 0.3],
   });
+  const cardBack = cardShrink.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-windowHeight * 0.3, 0],
+  });
 
   return (
-    <Animated.View style={[styles.footer, { bottom: cardTop }]}>
+    <Animated.View
+      style={[styles.footer, { bottom: showBtn ? cardTop : cardBack }]}
+    >
       {!showBtn && (
         <TouchableOpacity onPress={toggleCamera}>
           <Animated.View style={{ transform: [{ scale: btnScale }] }}>

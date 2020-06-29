@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Text, View, TouchableWithoutFeedback, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
-import { windowHeight, windowWidth, green, blue } from "../constants";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { windowHeight, windowWidth, red, green, blue } from "../constants";
+import {
+  Ionicons,
+  AntDesign,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 
-export default function CameraView({ getImage, setCameraOpen }) {
+export default function CameraView({ setImage, setCameraOpen }) {
   const [hasPermission, setHasPermission] = useState(null);
   const cameraRef = useRef(null);
 
@@ -26,7 +30,7 @@ export default function CameraView({ getImage, setCameraOpen }) {
     if (cameraRef) {
       let photo = await cameraRef.current.takePictureAsync();
       console.log("THE PHOTOS ARE HERE, MILDRED", photo);
-      // getImage(photo);
+      setImage(photo);
     }
   };
 
@@ -37,7 +41,7 @@ export default function CameraView({ getImage, setCameraOpen }) {
           <Ionicons
             name="ios-qr-scanner"
             size={windowWidth * 1.1}
-            color={"#fff"}
+            color={"white"}
             style={styles.icon}
           />
         </View>
@@ -46,14 +50,19 @@ export default function CameraView({ getImage, setCameraOpen }) {
         <MaterialCommunityIcons
           name="circle-slice-8"
           size={windowWidth * 0.28}
-          color={"#fff"}
+          color={green}
           style={styles.iconBtn}
         />
       </TouchableWithoutFeedback>
 
       <View style={styles.backBtn}>
         <TouchableWithoutFeedback onPress={setCameraOpen}>
-          <Text>Back</Text>
+          <AntDesign
+            name="caretright"
+            size={windowWidth * 0.19}
+            color={red}
+            // style={styles.iconBtn}
+          />
         </TouchableWithoutFeedback>
       </View>
     </View>
@@ -77,7 +86,7 @@ const styles = StyleSheet.create({
     left: windowWidth * 0.06,
   },
   icon: {
-    opacity: 0.3,
+    opacity: 0.1,
   },
   iconBtn: {
     position: "absolute",
@@ -87,7 +96,7 @@ const styles = StyleSheet.create({
   },
   backBtn: {
     position: "absolute",
-    bottom: windowHeight * 0.1,
-    right: windowWidth * 0.05,
+    bottom: windowHeight * 0.055,
+    right: windowWidth * 0.09,
   },
 });
